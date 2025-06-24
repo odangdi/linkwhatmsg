@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Ferramenta para gerar links do WhatsApp com mensagens personalizadas." />
+  <link rel="icon" href="favicon.png" type="image/png" />
+  <title>Gerador de Link do WhatsApp LWM</title>
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 17px;
+      color: #333;
+      line-height: 1.6;
+      padding-bottom: 80px;
+    }
+
+    h1 {
+      background-color: #2EC9ED;
+      color: #32CD32;
+      text-align: center;
+      padding: 5px;
+      width: 100%;
+    }
+
+    main {
+      padding: 10px;
+    }
+
+    label {
+      margin-left: 7px;
+      display: block;
+      font-weight: bold;
+    }
+
+    .exemplo {
+      font-size: 12px;
+      margin-left: 7px;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    input[type="number"] {
+      width: 95%;
+      margin: 4px 1px 8px 7px;
+      padding: 8px;
+      border: 3px solid #ccc;
+      border-radius: 5px;
+      font-size: 15px;
+    }
+
+    input[type="text"] {
+      width: 95%;
+      margin: 4px 1px 8px 7px;
+      padding: 8px;
+      border: 3px solid #ccc;
+      border-radius: 5px;
+      font-size: 15px;
+    }
+
+    button {
+      padding: 12px 20px;
+      margin: 10px 7px 0 7px;
+      border: none;
+      border-radius: 50px;
+      font-size: 18px;
+      cursor: pointer;
+      color: #fff;
+      transition: opacity 0.3s;
+    }
+
+    button:hover {
+      opacity: 0.9;
+    }
+
+    #create-button { background-color: #4CAF50; }
+    #copy-button { background-color: #00BFFF; }
+    #reset-button { background-color: #A52A2A; }
+    #share-button { background-color: #FF8C00; }
+
+    .success {
+      color: blue;
+      margin: 10px 7px 0;
+    }
+
+    .error {
+      color: red;
+      margin: 10px 7px 0;
+    }
+
+    #result {
+      font-size: 18px;
+      margin: 10px 7px 0;
+    }
+
+    #link-created {
+      margin: 10px 7px 0;
+      font-size: 12px;
+    }
+
+    #link-created mark {
+      background-color: green;
+      color: white;
+      padding: 5px;
+      display: inline-block;
+      margin-bottom: 5px;
+      border-radius: 3px;
+    }
+
+    #link-created li {
+      list-style: none;
+      margin-left: 0;
+    }
+
+    footer {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background-color: #333;
+      color: #fff;
+      text-align: center;
+      padding: 5px;
+    }
+
+    footer a {
+      color: #00CED1;
+      text-decoration: none;
+    }
+
+    @media (max-width: 600px) {
+      body {
+        font-size: 15px;
+        padding: 10px;
+      }
+
+      input,
+      button {
+        width: 100%;
+        margin-top: 10px;
+      }
+
+    }
+  </style>
+</head>
+<body>
+
+<div id="conteudo" style="display:none;">
+
+
+  <h1><img src="logo.png" alt="Logo do App" width="600"></h1>
+
+
+  <main>
+    <form>
+      <label for="phone">- Número do WhatsApp</label>
+      <span class="exemplo">Exemplo: 5511989999999</span>
+      <input type="number" id="phone" name="phone" placeholder="Código do país + DDD + número, sem espaços ou símbolos" />
+
+      <label for="message">- Mensagem (opcional, mas fica mais profissional)</label>
+      <span class="exemplo">Exemplo: Olá Paula, você tem agenda para hoje?</span>
+      <input type="text" id="message" name="message" placeholder="Mensagem personalizada para seu cliente" />
+
+      <button type="button" id="create-button">Criar Link</button>
+      <button type="button" id="copy-button" disabled>Copiar Link</button>
+      <button type="button" id="share-button">Compartilhar</button>
+      <button type="button" id="reset-button">Apagar</button>
+    </form>
+
+    <div id="result"></div>
+    <div id="link-created"></div>
+  </main>
+
+
+
+  <footer>
+    <p>&copy; 2025 - LINK WHATSAPP MSG. Licenciado sob
+      <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank">CC BY 4.0</a><br>
+      <a href="https://hotmart.com/pt-br/marketplace/produtos/linkwhatsmsg/R79662952H" target="_blank">Página de vendas</a>
+      Siga no Instagram <a href="https://www.instagram.com/di_ryco/" target="_blank">@di_ryco</a>
+    </p>
+  </footer>
+
+</div>
+
+<script>
+  const senhaCorreta = "LWM2025"; // Altere a senha conforme necessário
+  let acessoLiberado = false;
+
+  window.onload = () => {
+    const senhaDigitada = prompt("🔒 Bem Vindo ao Link WhatsApp Mensagem (LWM)! Esta página é protegida. Por favor, digite a senha recebida na sua compra para continuar:");
+    if (senhaDigitada === senhaCorreta) {
+      acessoLiberado = true;
+      document.getElementById("conteudo").style.display = "block";
+      document.getElementById("phone").focus();
+    } else {
+      alert("❌ Senha incorreta. Acesso negado.");
+      document.body.innerHTML = "<h2 style='text-align:center; margin-top:100px;'>Acesso não autorizado.</h2>";
+    }
+  };
+
+  function createLink() {
+    let phone = document.getElementById("phone").value.trim().replace(/\D/g, '');
+    const message = document.getElementById("message").value.trim();
+    const result = document.getElementById("result");
+    const linkCreated = document.getElementById("link-created");
+
+    if (!phone) {
+      showError("Por favor, digite o número do WhatsApp completo.");
+      return;
+    }
+
+    if (!/^\d+$/.test(phone)) {
+      showError("Número inválido. Use apenas números.");
+      return;
+    }
+
+    const url = "https://wa.me/" + phone + (message ? "?text=" + encodeURIComponent(message) : "");
+    result.className = "";
+    result.innerHTML = `<a href="${url}" target="_blank">${url}</a>`;
+
+    linkCreated.innerHTML = `
+      <mark>Este é seu Link personalizado com a mensagem:</mark><br>
+      <a href="${url}" target="_blank">${url}</a><br><br>
+      <mark>Dica: Use um encurtador de link (exemplos abaixo), copie o seu link acima, crie um cadastro em um encurtador de link e cadastre seu link para encurtalo.<br>OBS. Toda alteração que fizer na mensagem do seu link criado aqui, você devera atualizar também no encurtador.</mark>
+      <ul>
+        <li><a href="https://bit.ly" target="_blank">Bitly</a></li>
+        <li><a href="https://tinyurl.com" target="_blank">TinyURL</a></li>
+        <li><a href="https://encurtador.com.br" target="_blank">Encurtador</a></li>
+        <li><a href="https://rebrandly.com" target="_blank">Rebrandly</a></li>
+        Escolha outro, pesquise no google.    
+      </ul>
+    `;
+
+    showSuccess("Link criado com sucesso!");
+    document.getElementById("copy-button").disabled = false;
+  }
+
+  function copyLink() {
+    const link = document.querySelector('#link-created a');
+    if (!link) {
+      showError("Crie um link antes de copiar.");
+      return;
+    }
+
+    navigator.clipboard.writeText(link.href)
+      .then(() => showSuccess("Link copiado com sucesso!"))
+      .catch(() => showError("Erro ao copiar o link."));
+  }
+
+  function shareLink() {
+    const link = document.querySelector('#link-created a')?.href;
+    if (!link) {
+      showError("Crie um link antes de compartilhar.");
+      return;
+    }
+
+    if (navigator.share) {
+      navigator.share({
+        title: "Link do WhatsApp",
+        url: link
+      }).catch(() => showError("Compartilhamento cancelado."));
+    } else {
+      showError("Compartilhamento não suportado neste navegador.");
+    }
+  }
+
+  function resetForm() {
+    document.getElementById("phone").value = "";
+    document.getElementById("message").value = "";
+    document.getElementById("result").innerHTML = "";
+    document.getElementById("link-created").innerHTML = "";
+    document.getElementById("copy-button").disabled = true;
+  }
+
+  function showSuccess(message) {
+    const result = document.getElementById("result");
+    result.className = "success";
+    result.textContent = message;
+  }
+
+  function showError(message) {
+    const result = document.getElementById("result");
+    result.className = "error";
+    result.textContent = message;
+  }
+
+  document.getElementById("create-button").addEventListener("click", createLink);
+  document.getElementById("copy-button").addEventListener("click", copyLink);
+  document.getElementById("share-button").addEventListener("click", shareLink);
+  document.getElementById("reset-button").addEventListener("click", resetForm);
+</script>
+
+
+
+</body>
+</html>
